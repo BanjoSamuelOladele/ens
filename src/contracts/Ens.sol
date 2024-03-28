@@ -1,13 +1,18 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
+import "src/libraries/AllStructs.sol";
+
 contract Ens {
+//    AllStructs.User private userStruct;
 
     struct User{
         address userAddress;
         bytes32 _username;
         string uri;
     }
+
+    event RegistrationComplete(address indexed, string);
 
     mapping(bytes32 => User) private usernames;
     mapping(address => User) private userAddresses;
@@ -18,6 +23,8 @@ contract Ens {
         User memory user = User(msg.sender, hashedUsername, _uri);
         usernames[hashedUsername] = user;
         userAddresses[msg.sender] = user;
+
+        emit RegistrationComplete(msg.sender, _username);
     }
 
     function checkIfUsernameAlreadyExist(string calldata _username) public view returns(bool){
