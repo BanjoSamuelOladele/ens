@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "src/libraries/AllStructs.sol";
 
 contract Ens {
-//    AllStructs.User private userStruct;
 
     struct User{
         address userAddress;
@@ -19,6 +18,7 @@ contract Ens {
 
     function register(string calldata _username, string calldata _uri) external{
         require(checkIfUsernameAlreadyExist(_username), "User with that name already exist");
+        require(userAddresses[msg.sender].userAddress == address (0), "Already registered");
         bytes32 hashedUsername = hashStringToByte32(_username);
         User memory user = User(msg.sender, hashedUsername, _uri);
         usernames[hashedUsername] = user;
