@@ -36,24 +36,6 @@ contract ChatApp {
         iEns = IEns(ensAddress);
     }
 
-    function register(string calldata _name) external{
-        Ens.User memory newUser = iEns.getUserWithUsername(_name);
-        address userAddress = newUser.userAddress;
-
-        require(userAddress != address (0), "Not yet registered with ENS");
-        require(userAddress == msg.sender, "Not signer");
-        require(!checkIsRegistered(userAddress), "Already registered");
-
-        Profile storage profile = userProfile[userAddress];
-        profile.name = newUser._username;
-        profile.uri = newUser.uri;
-        profile.userAddress = userAddress;
-        profile.isRegistered = true;
-
-        allUsers.push(profile);
-
-        emit RegisterComplete(msg.sender);
-    }
 
     function sendMessage(string calldata _receiver, string calldata _message) external{
         address receiver = iEns.getAddress(_receiver);
